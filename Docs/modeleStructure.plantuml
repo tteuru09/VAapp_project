@@ -1,0 +1,75 @@
+@startuml ModeleStruct
+class HomePage 
+
+class LoginPage{
+    login(): boolean
+}
+
+class DashBoardPageRower{
+    logout(): void
+    myProfile(): void
+    mySlots(): void
+}
+
+class DashBoardPageAdmin{
+    logout(): void
+    myProfile(): void
+    allUsers(): void
+    allTeams(): void
+}
+
+class DashBoardPageTrainer{
+    logout(): void
+    myProfile(): void
+    allTeams(): void
+    allRowers(): void
+    allSlots(): void
+}
+
+class ProfilePage {
+    modifyPassword(): void
+}
+
+class TeamsPage {
+
+}
+
+class UsersPage {
+
+}
+
+class SlotsPage {
+
+}
+
+class RowersPage {
+
+}
+
+class DestinedSlotsPage {
+
+}
+
+HomePage ---> LoginPage : link login
+LoginPage --> LoginPage : login(): false
+
+LoginPage ---> DashBoardPageRower : login(): true ; if status = rower
+LoginPage ---> DashBoardPageAdmin : login(): true ; if status = admin
+LoginPage ---> DashBoardPageTrainer : login(): true ; if status = trainer
+
+DashBoardPageRower ---> HomePage : logout()
+DashBoardPageRower ---> ProfilePage : myProfile()
+DashBoardPageRower ---> DestinedSlotsPage : mySlots()
+
+DashBoardPageAdmin ---> HomePage : logout()
+DashBoardPageAdmin ---> ProfilePage : myProfile()
+DashBoardPageAdmin ---> UsersPage : allUsers()
+DashBoardPageAdmin ---> TeamsPage : allTeams()
+
+DashBoardPageTrainer ---> HomePage : logout()
+DashBoardPageTrainer ---> ProfilePage : myProfile()
+DashBoardPageTrainer ---> TeamsPage : allTeams()
+DashBoardPageTrainer ---> SlotsPage : allSlots()
+DashBoardPageTrainer ---> RowersPage : allRowers()
+
+@enduml
