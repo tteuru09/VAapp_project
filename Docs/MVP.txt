@@ -1,0 +1,5 @@
+#Plateforme
+Un application web 
+
+#Coeur de projet
+de gestion de créneaux d'entrainements de va'a.
