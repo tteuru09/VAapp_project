@@ -1,0 +1,32 @@
+@startuml ModeleStruct
+
+interface HomePage 
+
+interface LoginPage{
+    login(): boolean
+}
+
+interface ProfileAdminPage {
+    allUsers():void
+    logout():void
+}
+
+interface AllUsersPage {
+    myProfile():void
+    logout():void
+}
+
+HomePage ---> LoginPage : link login
+LoginPage --> LoginPage : login(): false
+
+LoginPage ---> AllUsersPage : login(): true ; if status = admin
+
+AllUsersPage --> HomePage: logout()
+AllUsersPage --> ProfileAdminPage: myProfile()
+
+ProfileAdminPage --> HomePage: logout()
+ProfileAdminPage --> AllUsersPage: allUsers()
+
+
+
+@enduml

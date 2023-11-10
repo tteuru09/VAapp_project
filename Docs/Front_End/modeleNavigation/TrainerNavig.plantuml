@@ -1,0 +1,45 @@
+@startuml ModeleStruct
+
+interface HomePage 
+
+interface LoginPage{
+    login(): boolean
+}
+
+interface ProfileTrainerPage {
+    allSlots():void
+    allCanoes():void
+    logout():void
+}
+
+interface AllSlotsPage {
+    allCanoes():void
+    myProfile():void
+    logout():void
+}
+
+interface AllCanoesPage {
+    allSlots():void
+    myProfile():void
+    logout():void
+}
+
+HomePage ---> LoginPage : link login
+LoginPage --> LoginPage : login(): false
+
+LoginPage ---> AllSlotsPage : login(): true ; if status = trainer
+
+AllSlotsPage --> HomePage: logout()
+AllSlotsPage --> AllCanoesPage: allCanoes()
+AllSlotsPage --> ProfileTrainerPage: myProfile()
+
+ProfileTrainerPage --> HomePage: logout()
+ProfileTrainerPage --> AllSlotsPage: allSlotsPage()
+ProfileTrainerPage --> AllCanoesPage: AllCanoesPage()
+
+AllCanoesPage --> HomePage: logout()
+AllCanoesPage --> ProfileTrainerPage: myProfile()
+AllCanoesPage --> AllSlotsPage: allSlots()
+
+
+@enduml

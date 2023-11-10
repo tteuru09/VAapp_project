@@ -1,0 +1,131 @@
+@startuml ModeleStruct
+class Canoe{
+    -idCanoe: integer
+    -name: String
+    -place: integer
+    -status: boolean
+    -listOfPlaces[]: Place[]
+}
+
+class Rower{
+    -id_Rower: integer
+    -name: String
+    -phoneNumber: String
+    -mail: String
+    -userIdentifier: User_Identifier
+}
+
+class Trainer{
+    -idTrainer: integer
+    -name: String
+    -phoneNumber: String
+    -mail: String
+    -userIdentifier: User_Identifier
+}
+
+class Admin{
+    -idAdmin: integer
+    -name: String
+    -phoneNumber: String
+    -mail: String
+    -userIdentifier: User_Identifier
+}
+
+class User_Identifier{
+    -idUI: integer
+    -login: String
+    -password: String
+}
+
+class Slot {
+    -idSlot: integer
+    -date: Date
+    -startHour: Hour
+    -endHour: Hour
+    -listOfCanoe[]: Canoe[]
+}
+
+class Place {
+    -idPlace: integer
+    -status: boolean
+    -position: integer
+    -rower: Rower
+}
+
+/' Interface Visuelle '/
+interface ProfileRowerPage {
+    -profile: Rower
+    mySlots():void
+    logout():void
+}
+
+interface ProfileAdminPage {
+    -profile: Admin
+    allUsers():void
+    logout():void
+}
+
+interface ProfileTrainerPage {
+    -profile: Trainer
+    allSlots():void
+    allCanoes():void
+    logout():void
+}
+
+interface AllUsersPage {
+    -allTrainers[]: Trainer[]
+    -allRowers[]: Rower[]
+    myProfile():void
+    logout():void
+}
+
+interface AllSlotsPage {
+    -allSlots[]: Slot[]
+    -allRowers[]: Rower[]
+    allCanoes():void
+    myProfile():void
+    logout():void
+}
+
+interface AllCanoesPage {
+    -allCanoes[]: Canoe[]
+    allSlots():void
+    myProfile():void
+    logout():void
+}
+
+interface MySlotsPage {
+    -rower: Rower
+    -listOfAvailableSlots[]: Slot[]
+    -listOfReservedSlots[]: Slot[]
+    myProfile():void
+    logout():void
+}
+
+Slot *-- Canoe
+
+Rower *-- User_Identifier
+Trainer *-- User_Identifier
+Admin *-- User_Identifier 
+
+Canoe *-- Place
+Rower --* Place
+
+/'Liens des Interface'/
+MySlotsPage *-- Rower
+MySlotsPage *-- Slot
+MySlotsPage *-- Slot
+
+ProfileRowerPage *-- Rower
+ProfileAdminPage *-- Admin
+ProfileTrainerPage *-- Trainer
+
+AllSlotsPage *-- Slot
+AllSlotsPage *-- Rower
+
+AllCanoesPage *-- Canoe
+
+AllUsersPage *-- Trainer
+AllUsersPage *-- Rower
+
+@enduml

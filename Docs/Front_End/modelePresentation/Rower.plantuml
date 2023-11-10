@@ -1,0 +1,56 @@
+@startuml ModelPresent
+
+interface mySlotsPage {
+    -header: Header
+    -body: BodySlots
+    -footer: Footer
+}
+
+interface Header {
+    -title: Text
+    -slots: Button
+    -profile: Button
+    -logout: Button
+}
+
+interface BodySlots {
+    -titleOfAvailableSlots: Text
+    -listOfAvailableSlots: List[AvailableSlot]
+    -titleOfReservedSlots: Text
+    -listOfReservedSlots: List[ReservedSlot]
+}
+
+interface AvailableSlot{
+    -dateOfSlot: Text
+    -hourStart: Text
+    -hourEnd: Text
+    -remainingPlaces: Text
+    -reserveAPlace: Button
+
+}
+
+interface ReservedSlot{
+    -dateOfSlot: Text
+    -hourStart: Text
+    -hourEnd: Text
+    -remainingPlaces: Text
+    -seeDetails: Button
+    -cancelReserved: Button
+}
+
+interface Footer {
+    -nameOfApp: Text
+    -nameOfCreator: Text
+    -dateOfDay: Text
+}
+
+mySlotsPage *-- Header
+mySlotsPage *-- BodySlots
+mySlotsPage *-- Footer
+
+BodySlots *-- AvailableSlot
+BodySlots *-- ReservedSlot
+
+
+
+@enduml

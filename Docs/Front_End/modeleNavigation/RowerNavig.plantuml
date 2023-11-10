@@ -1,0 +1,31 @@
+@startuml ModeleStruct
+
+interface HomePage 
+
+interface LoginPage{
+    login(): boolean
+}
+
+interface ProfileRowerPage {
+    mySlots():void
+    logout():void
+}
+
+interface MySlotsPage {
+    myProfile():void
+    logout():void
+}
+
+HomePage ---> LoginPage : link login
+LoginPage --> LoginPage : login(): false
+
+LoginPage ---> MySlotsPage : login(): true ; if status = rower
+
+MySlotsPage --> ProfileRowerPage: myProfile()
+MySlotsPage --> HomePage: logout()
+
+ProfileRowerPage --> HomePage: logout()
+ProfileRowerPage --> MySlotsPage: mySlots()
+
+
+@enduml

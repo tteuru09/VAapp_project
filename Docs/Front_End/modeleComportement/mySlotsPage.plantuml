@@ -1,0 +1,70 @@
+@startuml ModeleStruct
+/'  '/
+actor User
+participant mySlotsPage
+
+/' List of available slots '/
+group ListOfAvailableSlots
+    /' Make a reservation '/
+    group MakeAReservation
+        /' Select An Empty Place '/
+        alt selectAnEmptyPlace
+        User -> mySlotsPage: clickOnReserveAPlace
+        activate mySlotsPage
+            mySlotsPage -> mySlotsPage: displayListOfCanoes
+            User -> mySlotsPage: selectAnEmptyPlace
+            activate mySlotsPage
+            User -> mySlotsPage: clickOnConfirm
+            mySlotsPage -> mySlotsPage: displayConfirmation
+            deactivate mySlotsPage
+        mySlotsPage -> mySlotsPage: goBack
+        deactivate mySlotsPage
+        /' GoBackAnytime '/
+        else GoBackAnytime
+        User -> mySlotsPage: clickOnReserveAPlace
+        activate mySlotsPage
+        mySlotsPage -> mySlotsPage: displayListOfCanoes
+        User -> mySlotsPage: clickOnBack
+        mySlotsPage -> mySlotsPage: goBack
+        deactivate mySlotsPage
+        end
+    end
+end
+
+/' ListOfReservedSlots '/
+group ListOfReservedSlots
+    /' See details '/
+    group SeeDetails
+        User -> mySlotsPage: clickOnSeeDetails
+        activate mySlotsPage
+        mySlotsPage -> mySlotsPage: displayListOfCanoes
+        User -> mySlotsPage: clickOnBack
+        mySlotsPage -> mySlotsPage: goBack
+        deactivate mySlotsPage
+    end
+    group CancelReservation
+            alt Yes
+                User -> mySlotsPage: clickOnCancel
+                activate mySlotsPage
+                mySlotsPage -> mySlotsPage: displayAskConfirmation
+                activate mySlotsPage
+                User -> mySlotsPage: clickOnYes
+                mySlotsPage -> mySlotsPage: CancelReservationConfirmation
+                deactivate
+                mySlotsPage -> mySlotsPage: goBack
+                deactivate
+            else No
+                User -> mySlotsPage: clickOnCancel
+                activate mySlotsPage
+                mySlotsPage -> mySlotsPage: displayAskConfirmation
+                activate mySlotsPage
+                User -> mySlotsPage: clickOnNo
+                deactivate mySlotsPage
+                mySlotsPage -> mySlotsPage: goBack
+                deactivate mySlotsPage
+            end
+        
+    end
+end
+
+@enduml
