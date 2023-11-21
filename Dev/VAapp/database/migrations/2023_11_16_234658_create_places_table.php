@@ -19,7 +19,7 @@ return new class extends Migration
                 table: 'canoes', indexName: 'place_canoe_id'
             );
             $table->foreignId('rower_id')->constrained(
-                table: 'rowers', indexName: 'place_rower_id'
+                table: 'users', indexName: 'place_rower_id'
             );
             $table->timestamps();
         });

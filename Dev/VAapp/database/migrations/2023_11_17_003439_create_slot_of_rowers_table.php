@@ -17,7 +17,7 @@ return new class extends Migration
                 table: 'slots', indexName: 'SlotRower_slot_id'
             );
             $table->foreignId('rower_id')->constrained(
-                table: 'rowers', indexName: 'SlotRower_rower_id'
+                table: 'users', indexName: 'SlotRower_rower_id'
             );
             $table->boolean('available');
             $table->boolean('reserved');
