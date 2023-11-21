@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('places', function (Blueprint $table) {
+        Schema::create('slot_of_rowers', function (Blueprint $table) {
             $table->id();
-            $table->boolean('available');
-            $table->integer('position');
-            $table->foreignId('canoe_id')->constrained(
-                table: 'canoes', indexName: 'place_canoe_id'
+            $table->foreignId('slot_id')->constrained(
+                table: 'slots', indexName: 'SlotRower_slot_id'
             );
             $table->foreignId('rower_id')->constrained(
-                table: 'rowers', indexName: 'place_rower_id'
+                table: 'rowers', indexName: 'SlotRower_rower_id'
             );
+            $table->boolean('available');
+            $table->boolean('reserved');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('places');
+        Schema::dropIfExists('slot_of_rowers');
     }
 };
