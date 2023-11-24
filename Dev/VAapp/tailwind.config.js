@@ -7,6 +7,8 @@ export default {
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
+        "./node_modules/flowbite/**/*.js",
+        "./node_modules/tw-elements/dist/js/**/*.js"
     ],
 
     theme: {
@@ -15,7 +17,14 @@ export default {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
         },
+        container: {
+            center: true,
+          },
     },
 
-    plugins: [forms],
+    plugins: [
+        require("tw-elements/dist/plugin.cjs"),
+        require('flowbite/plugin'),
+        forms
+    ],
 };
