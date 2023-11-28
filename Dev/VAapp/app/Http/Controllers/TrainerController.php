@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Trainer;
+use App\Models\Slot;
+use App\Models\Canoe;
+use App\Models\User;
+use App\Models\SlotCanoe;
+use App\Models\SlotRower;
 use Illuminate\Http\Request;
 
 class TrainerController extends Controller
@@ -12,7 +17,18 @@ class TrainerController extends Controller
      */
     public function index()
     {
-        //
+        return view('trainer.dashboard');
+    }
+
+    public function show_slot()
+    {
+        return view('trainer.slot', [
+            'slots' => Slot::all(),
+            'canoes' => Canoe::all(),
+            'slots_canoes' => SlotCanoe::all(),
+            'slots_rowers' => SlotRower::all(),
+            'rowers' => User::where('status', 'rower')->get()
+        ]);
     }
 
     /**

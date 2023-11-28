@@ -2,25 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Rower;
+use App\Models\SlotRower;
 use Illuminate\Http\Request;
 
-class RowerController extends Controller
+class SlotRowerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('rower.dashboard');
-    }
-
-    public function show_slot()
-    {
-        return view('rower.slot', [
-            'availableSlots' => [],
-            'reservedSlots' => []
-        ]);
+        //
     }
 
     /**
@@ -42,7 +34,7 @@ class RowerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Rower $rower)
+    public function show(SlotRower $slotRower)
     {
         //
     }
@@ -50,7 +42,7 @@ class RowerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Rower $rower)
+    public function edit(SlotRower $slotRower)
     {
         //
     }
@@ -58,7 +50,7 @@ class RowerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Rower $rower)
+    public function update(Request $request, SlotRower $slotRower)
     {
         //
     }
@@ -66,7 +58,7 @@ class RowerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Rower $rower)
+    public function destroy(SlotRower $slotRower)
     {
         //
     }
