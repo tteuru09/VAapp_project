@@ -11,16 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('places', function (Blueprint $table) {
-            $table->id();
-            $table->integer('position');
+        Schema::create('slot_canoes', function (Blueprint $table) {
             $table->unsignedBigInteger('ref_slot');
             $table->unsignedBigInteger('ref_canoe');
-            $table->unsignedBigInteger('rower_id')->nullable();
-            $table->foreign(['ref_slot', 'ref_canoe'])
-            ->references(['ref_slot', 'ref_canoe'])->on('slot_canoes');           
-            $table->foreign('rower_id')
-            ->references('id')->on('users');
+            $table->foreign('ref_slot')->references('id')->on('slots');
+            $table->foreign('ref_canoe')->references('id')->on('canoes');
+            $table->primary(['ref_slot', 'ref_canoe']);
             $table->timestamps();
         });
     }
@@ -30,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('places');
+        Schema::dropIfExists('slot_canoes');
     }
 };

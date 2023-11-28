@@ -13,12 +13,8 @@ return new class extends Migration
     {
         Schema::create('canoes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('numberOfPlace');
-            $table->boolean('free');
-            $table->foreignId('slot_id')->constrained(
-                table: 'slots', indexName: 'canoes_slot_id'
-            );
+            $table->string('name')->unique();
+            $table->smallInteger('numberOfPlace');
             $table->timestamps();
         });
     }
