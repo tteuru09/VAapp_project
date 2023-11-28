@@ -1,4 +1,10 @@
-import './bootstrap';
+/* import './bootstrap'; */
+import Alpine from 'alpinejs';
+
+window.Alpine = Alpine;
+
+Alpine.start();
+
 import 'flowbite';
 import { Carousel, Input, Datepicker, Select, Timepicker, initTE } from "tw-elements";
 initTE({ Carousel, Input, Select }); // set second parameter to true if you want to use a debugger
@@ -16,9 +22,3 @@ const tpStart = new Timepicker(picker1, {
 const tpEnd = new Timepicker(picker2, {
   format24: true,
 });
-
-import Alpine from 'alpinejs';
-
-window.Alpine = Alpine;
-
-Alpine.start();
