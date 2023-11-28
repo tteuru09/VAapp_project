@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Place extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'position',
+        'ref_slot',
+        'ref_canoe',
+        'rower_id'
+    ];
 }

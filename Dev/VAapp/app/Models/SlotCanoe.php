@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Slot extends Model
+class SlotCanoe extends Model
 {
     use HasFactory;
 
@@ -15,9 +15,7 @@ class Slot extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'date',
-        'start_time',
-        'end_time',
-        'full'
+        'ref_slot',
+        'ref_canoe',
     ];
 }
