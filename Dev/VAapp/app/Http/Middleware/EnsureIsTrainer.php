@@ -17,7 +17,7 @@ class EnsureIsTrainer
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $status = $status = Auth::user()->status;
+        $status = Auth::user()->status;
         if ($status != 'trainer') return redirect('/');
         return $next($request);
     }
