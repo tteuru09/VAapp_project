@@ -8,7 +8,7 @@
             </div>
         </div>
     </div>
-    
+<!-- Table Header -->
     <table class="border-separate border-spacing-2 border-2 border-slate-400 bg-white table-auto mx-auto">
         <thead>
             <tr class="">
@@ -20,24 +20,24 @@
                 <th class="border-2 border-indigo-500 px-2 text-center">Actions</th>
             </tr>
         </thead>
+<!-- Table Body -->
         <tbody>
             @foreach ($slots as $slot)
             @php
-                $total_place = 0;
                 $slot_canoes = $slots_canoes->where('ref_slot', $slot->id);
                 $slot_rowers = $slots_rowers->where('ref_slot', $slot->id);
-                
-                foreach ($slot_canoes as $slot_canoe){
-                    $actual_canoe = $canoes->find($slot_canoe->ref_canoe);
-                    $total_place += $actual_canoe->numberOfPlace;
-                }
+                $edit_params = [
+                "slot" => $slot,
+                "canoes" => $slot_canoes,
+                "rowers" => $slot_rowers
+                ];
             @endphp  
             <tr class="odd:bg-white even:bg-slate-300">
                 <td class="px-2 text-center">{{date_format(date_create($slot->date),'d-m-Y')}}</td>
                 <td class="px-2 text-center">{{date_format(date_create($slot->start_time),'H:i') . " - " . date_format(date_create($slot->end_time),'H:i')}}</td>
-                <td class="text-center">{{$total_place}}</td>
+                <td class="text-center">{{$slot->get_left_places()}}</td>
                 <td class="text-center bg-white">
-                    <button id="dropCanoes" data-dropdown-toggle="{{'ListCanoes_' . $slot->id}}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                    <button id="dropCanoes" data-dropdown-toggle="{{'ListCanoes_' . $slot->id}}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" >
                         List of canoes
                         <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
@@ -58,7 +58,7 @@
                     </div>
                 </td>
                 <td class="text-center bg-white">
-                    <button id="dropRowers" data-dropdown-toggle="{{'ListRowers_' . $slot->id}}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                    <button id="dropRowers" data-dropdown-toggle="{{'ListRowers_' . $slot->id}}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" >
                         List of rowers 
                         <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
@@ -79,20 +79,35 @@
                     </div>
                 </td>
                 <td class="bg-white">
-                    <button class="p-2 bg-amber-300">Edit</button>
-                    <button class="p-2 bg-red-600">Delete</button>
+                    <button 
+                        class="p-2 bg-amber-300"
+                        data-te-toggle="modal"
+                        data-te-target="#modalEdit"
+                        data-te-whatever="{{json_encode($edit_params)}}"
+                        data-te-ripple-init
+                        data-te-ripple-color="light"
+                        >
+                        Edit
+                    </button>
+                    <x-danger-button
+                    data-te-toggle="modal"
+                    data-te-target="#modalDelete"
+                    data-te-whatever="{{$slot->id}}"
+                    data-te-ripple-init
+                    data-te-ripple-color="light">
+                    Delete
+                    </x-danger-button>
                 </td>
             </tr>
+            @php 
+                $slot_canoes = array();
+                $slot_rowers = array();
+            @endphp
             @endforeach
         </tbody>
     </table>
-    <!-- <div class="flex justify-center mt-4">
-        <a href="addSlot.trainer">
-            <button class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                Add Slot
-            </button>
-        </a>
-    </div> -->
+
+<!-- New Slot -->
     <div class="flex justify-center">
         <section class="bg-white dark:bg-gray-900">
             <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
@@ -189,5 +204,227 @@
             </div>
         </section>
     </div>
-    
+
+<!--Modal Delete -->
+    <div
+    data-te-modal-init
+    class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
+    id="modalDelete"
+    tabindex="-1"
+    aria-labelledby="modalDeleteTitle"
+    aria-modal="true"
+    role="dialog">
+    <div
+    data-te-modal-dialog-ref
+    class="pointer-events-none relative flex min-h-[calc(100%-1rem)] w-auto translate-y-[-50px] items-center opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:min-h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]">
+    <div
+        class="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
+            <div
+            class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+            <!--Modal title-->
+                <h5
+                class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200"
+                id="modalDeleteTitle">
+                Are you sure you want to delete ?
+                </h5>
+                <!--Close button-->
+                <button
+                class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
+                data-te-modal-dismiss
+                aria-label="Close">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="h-6 w-6">
+                    <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                </button>
+            </div>
+
+            <!--Modal body-->
+            <!--Modal footer-->
+            <div
+            id="ModalFooter"
+            class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+                <form method="post" action="{{ route('slot.destroy') }}" class="p-6">
+                    @csrf
+                    @method('delete')
+                    <input type="hidden" name="slot_id" value="">
+                    <x-danger-button
+                    data-te-ripple-init
+                    data-te-ripple-color="light">
+                    YES
+                    </x-danger-button>
+                    <button
+                    class="ml-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                    data-te-modal-dismiss
+                    data-te-ripple-init
+                    data-te-ripple-color="light">
+                    NO
+                    </button>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+
+<!-- Modal Edit -->
+    <div
+    data-te-modal-init
+    class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
+    id="modalEdit"
+    tabindex="-1"
+    aria-labelledby="modalEditLabel"
+    aria-hidden="true">
+        <div
+            data-te-modal-dialog-ref
+            class="pointer-events-none relative h-[calc(100%-1rem)] w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]">
+            <div
+            class="pointer-events-auto relative flex max-h-[100%] w-full flex-col overflow-hidden rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
+            
+                <div
+                    class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+                    <!--Modal title-->
+                    <h5
+                    class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200"
+                    id="modalEditLabel">
+                    Making changes
+                    </h5>
+                    <!--Close button-->
+                    <button
+                    type="button"
+                    class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
+                    data-te-modal-dismiss
+                    aria-label="Close">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="h-6 w-6">
+                        <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    </button>
+                </div>
+
+                <!--Modal body-->
+                <div id="ModalEditBody" class="flex justify-center">
+                    <div class="py-2 px-4 mx-auto max-w-2xl lg:py-16">
+                        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Edition of slot</h2>
+                        <form method="POST" action="{{ route('edit_slot') }}">
+                            @csrf
+                            @method('put')
+                            <input type="hidden" name="slot_id" value=""/>
+                            <div
+                            class="relative mb-1"
+                            id="editDateID"
+                            data-te-format="dd-mm-yyyy"
+                            data-te-input-wrapper-init>
+                                <input
+                                    type="text"
+                                    id="dateFormEdit"
+                                    class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                                    name="dateEdit" 
+                                    value="{{old('dateEdit')}}"/>
+                                <label
+                                    for="dateFormEdit"
+                                    class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+                                    >Select a date</label>
+                            </div>
+                            @if ($errors->has('dateEdit'))
+                                @foreach ($errors->get('dateEdit') as $message) 
+                                    <p class="text-red-600 text-xs"> {{$message}} </p> 
+                                @endforeach
+                            @endif
+                            <div
+                                class="relative mt-2 mb-1"
+                                data-te-format24="true"
+                                id="timeStartEdit"
+                                data-te-input-wrapper-init>
+                                <input
+                                    type="text"
+                                    class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                                    data-te-toggle="timepicker"
+                                    id="formStartEdit"
+                                    name="timeStartEdit"
+                                    value="{{old('timeStartEdit')}}" />
+                                <label
+                                    for="formStartEdit"
+                                    class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+                                    >Select a time</label
+                                >
+                            </div>
+                            @if ($errors->has('timeStartEdit'))
+                                @foreach ($errors->get('timeStartEdit') as $message) 
+                                    <p class="text-red-600 text-xs"> {{$message}} </p> 
+                                @endforeach
+                            @endif
+                            <div
+                                class="relative mt-2 mb-1"
+                                data-te-format24="true"
+                                id="timeEndEdit"
+                                data-te-input-wrapper-init>
+                                <input
+                                    type="text"
+                                    class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                                    data-te-toggle="timepicker"
+                                    id="formEndEdit"
+                                    name="timeEndEdit"
+                                    value="{{old('timeEndEdit')}}" />
+                                <label
+                                    for="formEndEdit"
+                                    class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+                                    >Select a time</label
+                                >
+                            </div>
+                            @if ($errors->has('timeEndEdit'))
+                                @foreach ($errors->get('timeEndEdit') as $message) 
+                                    <p class="text-red-600 text-xs"> {{$message}} </p> 
+                                @endforeach
+                            @endif
+                            <div class="relative mt-2 mb-1">
+                                <select data-te-select-init multiple value="" name="canoes[]" label="vide">
+                                    @foreach ($canoes as $canoe)
+                                    <option id="{{$canoe->id}}" value="{{$canoe->id}}">{{ $canoe->name . " : " . $canoe->numberOfPlace}}</option>
+                                    @endforeach
+                                </select>
+                                <label data-te-select-label-ref>Select canoes</label>
+                            </div>
+                            <div class="relative mt-2 mb-1">
+                                <select data-te-select-init multiple value="" name="rowers[]">
+                                    @foreach ($rowers as $rower)
+                                    <option id="{{$rower->id}}" value="{{$rower->id}}">{{ $rower->first_name . " " . $rower->last_name}}</option>
+                                    @endforeach
+                                </select>
+                                <label data-te-select-label-ref>Select users</label>
+                            </div>
+                            <button type="submit" class="inline-block rounded bg-slate-300 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-slate-400 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-slate-500">
+                                Edit Slot
+                            </button>
+                            <button
+                            type="button"
+                            class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200"
+                            data-te-modal-dismiss
+                            data-te-ripple-init
+                            data-te-ripple-color="light">
+                            Cancel
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </x-app-layout>
