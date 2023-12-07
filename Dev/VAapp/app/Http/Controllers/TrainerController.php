@@ -20,6 +20,7 @@ class TrainerController extends Controller
         return view('trainer.dashboard');
     }
 
+
     public function show_slot()
     {
         return view('trainer.slot', [
