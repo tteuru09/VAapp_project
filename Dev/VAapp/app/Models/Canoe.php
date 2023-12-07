@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Canoe extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'numberOfPlace'
+    ];
 }

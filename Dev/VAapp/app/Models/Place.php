@@ -11,8 +11,7 @@ class Place extends Model
 
     protected $fillable = [
         'position',
-        'ref_slot',
-        'ref_canoe',
+        'ref_slot_canoe',
         'rower_id'
     ];
 }

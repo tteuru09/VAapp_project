@@ -18,4 +18,21 @@ class SlotCanoe extends Model
         'ref_slot',
         'ref_canoe',
     ];
+
+    public function get_places()
+    {
+        return Place::where('ref_slot_canoe', $this->id)
+        ->orderByDesc('position')
+        ->get();
+    }
+
+    public function get_canoe_name()
+    {
+        return Canoe::find($this->ref_canoe)->name;
+    }
+
+    public function get_canoe_nbplaces()
+    {
+        return Canoe::find($this->ref_canoe)->numberOfPlace;
+    }
 }
