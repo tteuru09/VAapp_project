@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('places', function (Blueprint $table) {
             $table->id();
             $table->integer('position');
-            $table->unsignedBigInteger('ref_slot');
-            $table->unsignedBigInteger('ref_canoe');
+            $table->unsignedBigInteger('ref_slot_canoe');
             $table->unsignedBigInteger('rower_id')->nullable();
-            $table->foreign(['ref_slot', 'ref_canoe'])
-            ->references(['ref_slot', 'ref_canoe'])->on('slot_canoes');           
+            $table->foreign('ref_slot_canoe')
+            ->references('id')->on('slot_canoes')->cascadeOnDelete();           
             $table->foreign('rower_id')
             ->references('id')->on('users');
             $table->timestamps();
