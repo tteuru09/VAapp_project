@@ -28,12 +28,15 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified', 'rower'])->group(function () {
     Route::get('/dashboard.rower',[RowerController::class, 'index'])->name('dashboard.rower');
     Route::get('/slot.rower',[RowerController::class, 'show_slot'])->name('slot.rower');
+    Route::post('reserve_place',[RowerController::class, 'reserve_place'])->name('reserve_place');
 });
 
 Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
     Route::get('/dashboard.trainer', [TrainerController::class, 'index'])->name('dashboard.trainer');
     Route::get('/slot.trainer',[TrainerController::class, 'show_slot'])->name('slot.trainer');
+    Route::delete('/slot.trainer',[SlotController::class, 'destroy'])->name('slot.destroy');
     Route::post('add_slot',[SlotController::class, 'store'])->name('add_slot');
+    Route::put('edit_slot',[SlotController::class, 'edit'])->name('edit_slot');
 });
 
 Route::middleware(['auth', 'verified', 'admin'])->group(function () {
