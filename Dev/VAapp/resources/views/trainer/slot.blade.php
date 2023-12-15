@@ -24,8 +24,8 @@
         <tbody>
             @foreach ($slots as $slot)
             @php
-                $slot_canoes = $slots_canoes->where('ref_slot', $slot->id);
-                $slot_rowers = $slots_rowers->where('ref_slot', $slot->id);
+                $slot_canoes = $slot->get_slot_canoes();
+                $slot_rowers = $slot->get_slot_rowers();
                 $edit_params = [
                 "slot" => $slot,
                 "canoes" => $slot_canoes,
@@ -82,7 +82,7 @@
                     <button 
                         class="p-2 bg-amber-300"
                         data-te-toggle="modal"
-                        data-te-target="#modalEdit"
+                        data-te-target="#modalEditSlot"
                         data-te-whatever="{{json_encode($edit_params)}}"
                         data-te-ripple-init
                         data-te-ripple-color="light"
@@ -91,7 +91,7 @@
                     </button>
                     <x-danger-button
                     data-te-toggle="modal"
-                    data-te-target="#modalDelete"
+                    data-te-target="#modalDeleteSlot"
                     data-te-whatever="{{$slot->id}}"
                     data-te-ripple-init
                     data-te-ripple-color="light">
@@ -209,7 +209,7 @@
     <div
     data-te-modal-init
     class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
-    id="modalDelete"
+    id="modalDeleteSlot"
     tabindex="-1"
     aria-labelledby="modalDeleteTitle"
     aria-modal="true"
@@ -280,7 +280,7 @@
     <div
     data-te-modal-init
     class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
-    id="modalEdit"
+    id="modalEditSlot"
     tabindex="-1"
     aria-labelledby="modalEditLabel"
     aria-hidden="true">
@@ -320,8 +320,8 @@
                 </div>
 
                 <!--Modal body-->
-                <div id="ModalEditBody" class="flex justify-center">
-                    <div class="py-2 px-4 mx-auto max-w-2xl lg:py-16">
+                <div id="ModalEditBody" class="relative overflow-y-auto p-2">
+                    <div class="py-8 px-4 mx-auto max-w-2xl">
                         <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Edition of slot</h2>
                         <form method="POST" action="{{ route('edit_slot') }}">
                             @csrf
@@ -394,21 +394,21 @@
                                     <p class="text-red-600 text-xs"> {{$message}} </p> 
                                 @endforeach
                             @endif
+                            <p>List of canoes</p>
                             <div class="relative mt-2 mb-1">
                                 <select data-te-select-init multiple value="" name="canoes[]" label="vide">
                                     @foreach ($canoes as $canoe)
                                     <option id="{{$canoe->id}}" value="{{$canoe->id}}">{{ $canoe->name . " : " . $canoe->numberOfPlace}}</option>
                                     @endforeach
                                 </select>
-                                <label data-te-select-label-ref>Select canoes</label>
                             </div>
+                            <p>List of rowers</p>
                             <div class="relative mt-2 mb-1">
                                 <select data-te-select-init multiple value="" name="rowers[]">
                                     @foreach ($rowers as $rower)
                                     <option id="{{$rower->id}}" value="{{$rower->id}}">{{ $rower->first_name . " " . $rower->last_name}}</option>
                                     @endforeach
                                 </select>
-                                <label data-te-select-label-ref>Select users</label>
                             </div>
                             <button type="submit" class="inline-block rounded bg-slate-300 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-slate-400 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-slate-500">
                                 Edit Slot
