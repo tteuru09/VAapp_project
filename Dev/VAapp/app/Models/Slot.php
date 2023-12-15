@@ -38,6 +38,10 @@ class Slot extends Model
         ->where('ref_rower', auth()->user()->id)->first();
     }
 
+    public function get_slot_rowers(){
+        return SlotRower::where('ref_slot', $this->id)->get();
+    }
+
     public function get_slot_canoes()
     {
         return SlotCanoe::where('ref_slot',$this->id)->get();
