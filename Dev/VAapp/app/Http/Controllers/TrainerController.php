@@ -26,9 +26,14 @@ class TrainerController extends Controller
         return view('trainer.slot', [
             'slots' => Slot::all(),
             'canoes' => Canoe::all(),
-            'slots_canoes' => SlotCanoe::all(),
-            'slots_rowers' => SlotRower::all(),
             'rowers' => User::where('status', 'rower')->get()
+        ]);
+    }
+
+    public function show_canoe()
+    {
+        return view('trainer.canoe', [
+            'canoes' => Canoe::all()
         ]);
     }
 

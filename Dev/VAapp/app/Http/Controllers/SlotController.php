@@ -135,10 +135,21 @@ class SlotController extends Controller
         $to_add_slot_canoes = array_diff($actual_slot_canoes_id, $instersect_slot_canoes);
         $to_add_slot_rowers = array_diff($actual_slot_rowers_id, $instersect_slot_rowers);
 
-        foreach($to_delete_slot_canoes as $slot_canoe) SlotCanoe::where([
-            ['ref_slot', '=' ,$slot->id],
-            ['ref_canoe', '=', $slot_canoe]])
-            ->delete();
+        foreach($to_delete_slot_canoes as $slot_canoe) {
+            $actual_slot_canoe = SlotCanoe::where([
+                ['ref_slot', '=' ,$slot->id],
+                ['ref_canoe', '=', $slot_canoe]])->first();
+
+            $places = Place::where('ref_slot_canoe', $actual_slot_canoe->id)->get();
+            foreach($places as $place){
+                if($place->rower_id != null) SlotRower::where([
+                    ['ref_rower', '=', $place->rower_id],
+                    ['ref_slot', '=' ,$slot->id]
+                ])->update(['reserved' => 0]);
+            }
+            
+            $actual_slot_canoe->delete(); 
+        }
 
         foreach($to_delete_slot_rowers as $slot_rower) SlotRower::where([
             ['ref_slot', '=' ,$slot->id],

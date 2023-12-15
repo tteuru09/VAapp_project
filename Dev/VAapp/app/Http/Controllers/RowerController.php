@@ -72,6 +72,30 @@ class RowerController extends Controller
         return redirect('slot.rower');
     }
 
+    public function cancel_reserve(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'slot_id' => 'required',
+            'place' => 'required'
+        ]);
+        
+        $slot = Slot::find($request->slot_id);
+        
+        $slot->get_slot_rower()->update([
+            'reserved' => 0
+        ]);
+
+        Place::find($request->place)->update([
+            'rower_id' => null
+        ]);
+
+        if($slot->get_left_places() > 0) $slot->update([
+            'full' => 0
+        ]);
+
+        return redirect('slot.rower');
+    }
+
 
 
     
