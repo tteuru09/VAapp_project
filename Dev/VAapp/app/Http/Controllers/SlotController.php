@@ -151,11 +151,28 @@ class SlotController extends Controller
             $actual_slot_canoe->delete(); 
         }
 
-        foreach($to_delete_slot_rowers as $slot_rower) SlotRower::where([
+        $slot_canoes = SlotCanoe::where('ref_slot', $slot->id)->pluck('id')->toArray();
+
+        foreach($to_delete_slot_rowers as $slot_rower) {
+            
+            SlotRower::where([
             ['ref_slot', '=' ,$slot->id],
             ['ref_rower', '=', $slot_rower]])
             ->delete();
+
+            foreach($slot_canoes as $slot_canoe){
+                $place = Place::where([
+                    ['rower_id', '=', $slot_rower],
+                    ['ref_slot_canoe', '=' ,$slot_canoe]
+                ])->first();
+
+                if($place != null) $place->update([
+                    'rower_id' => null
+                ]);
+            }
+        }
         
+
         foreach($to_add_slot_canoes as $id_canoe) {
             $slot_canoe = SlotCanoe::create([
                 'ref_slot' => $slot->id,
@@ -177,6 +194,8 @@ class SlotController extends Controller
                 'reserved' => 0
             ]);
         }
+
+        
 
         return redirect('slot.trainer');
     }
