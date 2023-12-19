@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('ref_slot_canoe')
             ->references('id')->on('slot_canoes')->cascadeOnDelete();           
             $table->foreign('rower_id')
-            ->references('id')->on('users');
+            ->references('id')->on('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }

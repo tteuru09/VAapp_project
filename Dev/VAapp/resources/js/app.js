@@ -38,6 +38,20 @@ if (modalDeleteCanoe != null){
   })
 }
 
+const modalDeleteUser = document.getElementById('modalDeleteUser');
+
+if (modalDeleteUser != null){
+  modalDeleteUser.addEventListener('show.te.modal', (e) => {
+  
+    const button = e.relatedTarget;
+    
+    const canoe = button.getAttribute('data-te-whatever');
+    
+    const inputToChange = modalDeleteUser.querySelector("#ModalFooter input[name='user_id']");
+    inputToChange.value = canoe;
+  })
+}
+
 
 //Edit modal 
 const modalEditSlot = document.getElementById('modalEditSlot');
@@ -105,6 +119,34 @@ if(modalEditCanoe != null){
     idInput.value = params.id;
     nameInput.value = params.name;
     placeSelect.options.namedItem(params.numberOfPlace).setAttribute("selected",'');
+  })
+}
+
+const modalEditUser = document.getElementById('modalEditUser');
+if(modalEditUser != null){
+    modalEditUser.addEventListener('show.te.modal', (e) => {
+    const button = e.relatedTarget;
+  
+    //Constantes
+    const params = JSON.parse(button.getAttribute('data-te-whatever'));
+    const idUser = modalEditUser.querySelector("#ModalEditBody input[name='user_id']");
+    const firstName = modalEditUser.querySelector("#ModalEditBody input[name='first_name_edit']");
+    const lastName = modalEditUser.querySelector("#ModalEditBody input[name='last_name_edit']");
+    const email = modalEditUser.querySelector("#ModalEditBody input[name='email_edit']");
+    const phone = modalEditUser.querySelector("#ModalEditBody input[name='phone_edit']");
+    const statusSelect = modalEditUser.querySelector("#ModalEditBody select[name='status_edit']");
+
+    for (let i = 0; i < 3; i++) {
+      statusSelect.options[i].removeAttribute('selected')
+    }
+
+    // Change value of inputs
+    idUser.value = params.id;
+    firstName.value = params.first_name;
+    lastName.value = params.last_name;
+    email.value = params.email;
+    phone.value = params.phone_number;
+    statusSelect.options.namedItem(params.status).setAttribute("selected",'');
   })
 }
 

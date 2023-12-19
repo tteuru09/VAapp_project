@@ -39,15 +39,15 @@ Route::middleware(['auth', 'verified', 'rower'])->group(function () {
 Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
 
     Route::get('/dashboard.trainer', [TrainerController::class, 'index'])->name('dashboard.trainer');
-    Route::get('/slot.trainer',[TrainerController::class, 'show_slot'])->name('slot.trainer');
-    Route::get('/canoe.trainer',[TrainerController::class, 'show_canoe'])->name('canoe.trainer');
 
     /* CRUD Slots */
+    Route::get('/slot.trainer',[TrainerController::class, 'show_slot'])->name('slot.trainer');
     Route::delete('/slot.trainer',[SlotController::class, 'destroy'])->name('slot.destroy');
     Route::post('add_slot',[SlotController::class, 'store'])->name('add_slot');
     Route::put('edit_slot',[SlotController::class, 'edit'])->name('edit_slot');
 
     /* CRUD Canoes */
+    Route::get('/canoe.trainer',[TrainerController::class, 'show_canoe'])->name('canoe.trainer');
     Route::delete('/canoe.trainer',[CanoeController::class, 'destroy'])->name('canoe.destroy');
     Route::post('add_canoe',[CanoeController::class, 'store'])->name('add_canoe');
     Route::put('edit_canoe',[CanoeController::class, 'edit'])->name('edit_canoe');
@@ -55,6 +55,12 @@ Route::middleware(['auth', 'verified', 'trainer'])->group(function () {
 
 Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::get('/dashboard.admin', [AdminController::class, 'index'])->name('dashboard.admin');
+
+    /* CRUD Users */
+    Route::get('/users.admin', [AdminController::class, 'show_users'])->name('users.admin');
+    Route::delete('/users.admin',[AdminController::class, 'destroy'])->name('user.destroy');
+    Route::post('add_user',[AdminController::class, 'store'])->name('add_user');
+    Route::put('edit_user',[AdminController::class, 'edit'])->name('edit_user');
 });
 
 Route::middleware('auth')->group(function () {
