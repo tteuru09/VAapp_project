@@ -1,23 +1,22 @@
 <x-app-layout>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-green-400 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+            <div class="bg-teal overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-ecru">
                     {{ __("List of all slots!") }}
                 </div>
             </div>
         </div>
     </div>
 <!-- Table Header -->
-    <table class="border-separate border-spacing-2 border-2 border-slate-400 bg-white table-auto mx-auto">
+    <table class="border-separate border-spacing-2 border-2 border-black rounded-xl bg-gradient-to-r from-photo_blue to-azure_web table-auto mx-auto">
         <thead>
             <tr class="">
-                <th class="border-2 border-indigo-500 px-2 text-center">Date</th>
-                <th class="border-2 border-indigo-500 px-2 text-center">Hour</th>
-                <th class="border-2 border-indigo-500 px-2 text-center">Places left</th>
-                <th class="border-2 border-indigo-500 px-2 text-center">List of canoes</th>
-                <th class="border-2 border-indigo-500 px-2 text-center">List of rowers</th>
-                <th class="border-2 border-indigo-500 px-2 text-center">Actions</th>
+                <th class="border-2 border-teal rounded-xl px-2 text-center">Date</th>
+                <th class="border-2 border-teal rounded-xl px-2 text-center">Hour</th>
+                <th class="border-2 border-teal rounded-xl px-2 text-center">Places left</th>
+                <th class="border-2 border-teal rounded-xl px-2 text-center">List of rowers</th>
+                <th class="border-2 border-teal rounded-xl px-2 text-center">Actions</th>
             </tr>
         </thead>
 <!-- Table Body -->
@@ -32,32 +31,11 @@
                 "rowers" => $slot_rowers
                 ];
             @endphp  
-            <tr class="odd:bg-white even:bg-slate-300">
+            <tr class="">
                 <td class="px-2 text-center">{{date_format(date_create($slot->date),'d-m-Y')}}</td>
                 <td class="px-2 text-center">{{date_format(date_create($slot->start_time),'H:i') . " - " . date_format(date_create($slot->end_time),'H:i')}}</td>
                 <td class="text-center">{{$slot->get_left_places()}}</td>
-                <td class="text-center bg-white">
-                    <button id="dropCanoes" data-dropdown-toggle="{{'ListCanoes_' . $slot->id}}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" >
-                        List of canoes
-                        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                        </svg>
-                    </button>
-                    <!-- List of canoes menu -->
-                    <div id="{{'ListCanoes_' . $slot->id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropCanoes">
-                        @foreach ($slot_canoes as $slot_canoe)
-                            @php 
-                                $canoe = $canoes->find($slot_canoe->ref_canoe);
-                            @endphp
-                            <li>
-                                {{$canoe->name . " : " . $canoe->numberOfPlace}}
-                            </li>
-                        @endforeach
-                        </ul>
-                    </div>
-                </td>
-                <td class="text-center bg-white">
+                <td class="text-center ">
                     <button id="dropRowers" data-dropdown-toggle="{{'ListRowers_' . $slot->id}}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" >
                         List of rowers 
                         <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
@@ -65,22 +43,67 @@
                         </svg>
                     </button>
                     <!-- List of rowers menu -->
-                    <div id="{{'ListRowers_' . $slot->id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropRowers">
+                    <div id="{{'ListRowers_' . $slot->id}}" class="z-10 hidden  divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200 bg-white" aria-labelledby="dropRowers">
                         @foreach ($slot_rowers as $slot_rower)
                             @php 
                                 $rower = $rowers->find($slot_rower->ref_rower);
                             @endphp
                             <li>
+                                @if ($slot_rower->reserved == 1)
+                                    <span>&#10003;</span>
+                                @endif
                                 {{$rower->first_name . " " . $rower->last_name}}
                             </li>
                         @endforeach
                         </ul>
                     </div>
                 </td>
-                <td class="bg-white">
+                <td class="">
+                    <button
+                    class="m-2 p-2 bg-caribbean_current text-white rounded-xl"
+                    type="button"
+                    data-te-collapse-init
+                    data-te-collapse-collapsed
+                    data-te-target="#{{'accordion_'.$slot->id}}"
+                    aria-expanded="false">
+                    Details
+                    </button>
+                </td>
+            </tr>
+            <tr
+                id="{{'accordion_'.$slot->id}}"
+                class="!visible hidden border-0"
+                data-te-collapse-item
+                data-te-parent="tableSlots">
+                <td colspan="5" class="px-5 py-4 justify-center">
+                    @foreach ($slot_canoes as $slot_canoe)
+                        @php 
+                            $actual_places = $slot_canoe->get_places();
+                        @endphp
+                        <h3><b>{{$slot_canoe->get_canoe_name();}}</b></h3>
+                        <div class="p-2 my-4 justify-center flex flex-row flex-nowrap bg-hunyadi_yellow rounded-md border-black border-2">
+                            @foreach ($actual_places as $place)
+                                @php 
+                                    $actual_rower = $place->get_rower();
+                                @endphp 
+                                @if ($actual_rower != null) 
+                                    <div class="p-2 mx-2 basis-1/6 rounded-full bg-steel_blue text-center border-2 border-black"
+                                        data-te-toggle="tooltip"
+                                        data-te-placement="top"
+                                        title="{{$actual_rower->first_name . ' ' . $actual_rower->last_name}}">{{substr($actual_rower->first_name,0,1) . '.' . substr($actual_rower->last_name,0,1)}}
+                                    </div>
+                                @else
+                                    <div class="p-2 mx-2 basis-1/6 rounded-full bg-fern_green text-center border-2 border-black text-white">
+                                        {{$place->position}}
+                                    </div>                                            
+                                @endif
+                            @endforeach
+                        </div>
+                    @endforeach
+                    <p><b>Actions </b></p>
                     <button 
-                        class="p-2 bg-amber-300"
+                        class="p-2 bg-hunyadi_yellow rounded-xl"
                         data-te-toggle="modal"
                         data-te-target="#modalEditSlot"
                         data-te-whatever="{{json_encode($edit_params)}}"
@@ -107,10 +130,62 @@
         </tbody>
     </table>
 
+    <button class="flex py-4 mx-auto"
+            data-te-toggle="modal"
+            data-te-target="#modalNewSlot"
+            data-te-ripple-init>
+        <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path opacity="0.5" d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z" stroke="#1C274C" stroke-width="1.5"/>
+            <path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+    </button>
+
 <!-- New Slot -->
-    <div class="flex justify-center">
-        <section class="bg-white dark:bg-gray-900">
-            <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+    <div 
+    data-te-modal-init
+    class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
+    id="modalNewSlot"
+    tabindex="-2"
+    aria-labelledby="modalEditLabel"
+    aria-hidden="true">
+    <div
+            data-te-modal-dialog-ref
+            class="pointer-events-none relative h-[calc(100%-1rem)] w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]">
+            <div
+            class="pointer-events-auto relative flex max-h-[100%] w-full flex-col overflow-hidden rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
+            
+                <div
+                    class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+                    <!--Modal title-->
+                    <h5
+                    class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200"
+                    id="modalEditLabel">
+                    Creating a new slot
+                    </h5>
+                    <!--Close button-->
+                    <button
+                    type="button"
+                    class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
+                    data-te-modal-dismiss
+                    aria-label="Close">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="h-6 w-6">
+                        <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    </button>
+                </div>
+
+                <!--Modal body-->
+                <div id="ModalEditBody" class="relative overflow-y-auto p-2">
+                <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
                 <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">New slot</h2>
                 <form method="POST" action="{{ route('add_slot') }}">
                     @csrf
@@ -202,7 +277,9 @@
                     </button>
                 </form>
             </div>
-        </section>
+                </div>
+            </div>
+        </div>
     </div>
 
 <!--Modal Delete -->

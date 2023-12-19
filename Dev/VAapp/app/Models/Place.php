@@ -14,4 +14,9 @@ class Place extends Model
         'ref_slot_canoe',
         'rower_id'
     ];
+
+    public function get_rower()
+    {
+        return User::find($this->rower_id);
+    }
 }
