@@ -1,0 +1,16 @@
+{
+  "public/img/Bg-VAapp.jpg": {
+    "file": "assets/Bg-VAapp-10b62e70.jpg",
+    "src": "public/img/Bg-VAapp.jpg"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-60be4db3.css",
+    "isEntry": true,
+    "src": "resources/css/app.css"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-1c3e315a.js",
+    "isEntry": true,
+    "src": "resources/js/app.js"
+  }
+}
