@@ -58,7 +58,7 @@
                                         $actual_places = $slot_canoe->get_places();
                                     @endphp
                                     <h3>{{$slot_canoe->get_canoe_name();}}</h3>
-                                    <div class="p-2 my-4 justify-center flex flex-row flex-nowrap bg-bois rounded-md border-black border-2 border-double">
+                                    <div class="p-2 my-4 justify-center flex flex-row flex-nowrap bg-hunyadi_yellow rounded-md border-black border-2 border-double">
                                         @foreach ($actual_places as $place) 
                                             <div class="p-2 mx-2 basis-1/6 rounded-full bg-fern_green border-black border-2 text-center">{{$place->position}}</div>
                                             @if ($place->rower_id != null) 
@@ -138,7 +138,7 @@
                                         $actual_places = $slot_canoe->get_places();
                                     @endphp
                                     <h3>{{$slot_canoe->get_canoe_name();}}</h3>
-                                    <div class="p-2 my-4 justify-center flex flex-row flex-nowrap bg-bois rounded-md border-black border-2 border-double">
+                                    <div class="p-2 my-4 justify-center flex flex-row flex-nowrap bg-hunyadi_yellow rounded-md border-black border-2 border-double">
                                         @foreach ($actual_places as $place) 
                                             <div class="p-2 mx-2 basis-1/6 rounded-full bg-fern_green border-2 border-black text-center">{{$place->position}}</div>
                                             @if ($place->rower_id != null)
